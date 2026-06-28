@@ -1,4 +1,4 @@
-import React, { startTransition, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ToppingCard from './topping-card';
 import { Topping } from '@/lib/types';
 import { useSearchParams } from 'next/navigation';
@@ -11,8 +11,8 @@ const ToppingList = ({
     handleCheckBoxCheck: (topping: Topping) => void;
 }) => {
     const searchParams = useSearchParams();
-
     const [toppings, setToppings] = useState<Topping[]>([]);
+    
     useEffect(() => {
         const fetchData = async () => {
             const toppingResponse = await fetch(
@@ -20,17 +20,16 @@ const ToppingList = ({
                     process.env.NEXT_PUBLIC_BACKEND_URL
                 }/api/catalog/toppings?tenantId=${searchParams.get('restaurantId')}`
             );
-            const toppings = await toppingResponse.json();
-            setToppings(toppings);
-            console.log('toppings', toppings);
+            const toppingsData = await toppingResponse.json();
+            setToppings(toppingsData);
         };
         fetchData();
-    }, []);
+    }, [searchParams]);
 
     return (
         <section className="mt-6">
-            <h3>Extra toppings</h3>
-            <div className="grid grid-cols-3 gap-4 mt-2">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Custom Add-ons & Premium Wraps</h4>
+            <div className="grid grid-cols-3 gap-3 mt-2">
                 {toppings.map((topping) => {
                     return (
                         <ToppingCard

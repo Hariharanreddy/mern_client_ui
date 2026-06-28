@@ -5,7 +5,7 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'mernspace-project.s3.ap-south-1.amazonaws.com',
+                hostname: 'objectstorage.*.oraclecloud.com',
             },
         ],
     },

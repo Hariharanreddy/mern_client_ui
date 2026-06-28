@@ -121,11 +121,11 @@ const OrderSummary = ({
                 <div className="flex items-center justify-between">
                     <span className="font-bold">Order total</span>
                     <span className="font-bold flex flex-col items-end">
-                        <span className={discountPercentage ? 'line-through text-gray-400' : ''}>
+                        <span className={discountPercentage ? 'line-through text-muted-foreground' : ''}>
                             ₹{grandWithoutDiscountTotal}
                         </span>
                         {discountPercentage ? (
-                            <span className="text-green-700">${grandWithDiscountTotal}</span>
+                            <span className="text-emerald-600 dark:text-emerald-400 font-bold">₹{grandWithDiscountTotal}</span>
                         ) : null}
                     </span>
                 </div>

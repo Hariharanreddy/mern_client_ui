@@ -16,7 +16,7 @@ const TenantSelect = ({ restaurants }: { restaurants: { data: Tenant[] } }) => {
             onValueChange={handleValueChange}
             defaultValue={searchParams.get('restaurantId') || ''}>
             <SelectTrigger className="w-[180px] focus:ring-0">
-                <SelectValue placeholder="Select Restaurant" />
+                <SelectValue placeholder="Select Boutique" />
             </SelectTrigger>
             <SelectContent>
                 {restaurants.data.map((restaurant) => {

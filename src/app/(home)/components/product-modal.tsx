@@ -16,20 +16,19 @@ import { useToast } from '@/components/ui/use-toast';
 
 const SucessToast = () => {
     return (
-        <>
-            <div className="flex items-center gap-2">
-                <CircleCheck className="text-green-700" />
-                <span className="font-bold">Added to cart</span>
-            </div>
-        </>
+        <div className="flex items-center gap-2">
+            <CircleCheck className="text-emerald-500" />
+            <span className="font-bold text-foreground">Added to cart successfully</span>
+        </div>
     );
 };
+
 type ChosenConfig = {
     [key: string]: string;
 };
+
 const ProductModal = ({ product }: { product: Product }) => {
     const { toast } = useToast();
-
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const cartItems = useAppSelector((state) => state.cart.cartItems);
@@ -113,13 +112,6 @@ const ProductModal = ({ product }: { product: Product }) => {
     };
 
     const handleRadioChange = (key: string, data: string) => {
-        /**
-          {
-            Size: "Medium",
-            Crust: "Thin"
-        }
-         */
-
         startTransition(() => {
             setChosenConfig((prev) => {
                 return { ...prev, [key]: data };
@@ -129,70 +121,93 @@ const ProductModal = ({ product }: { product: Product }) => {
 
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger className="bg-orange-200 hover:bg-orange-300 text-orange-500 px-6 py-2 rounded-full shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150">
-                Choose
+            <DialogTrigger className="bg-primary/10 hover:bg-primary/20 text-primary px-5 py-1.5 rounded-full font-semibold border border-primary/20 hover:border-primary/40 shadow-sm transition-all duration-300 hover:shadow-primary/5 focus:outline-none">
+                Customize
             </DialogTrigger>
-            <DialogContent className="max-w-3xl p-0">
-                <div className="flex">
-                    <div className="w-1/3 bg-white rounded p-8 flex items-center justify-center">
-                        <Image src={product.image} width={450} height={450} alt={product.name} />
+            <DialogContent className="max-w-3xl p-0 overflow-hidden bg-background border border-border text-foreground rounded-2xl shadow-2xl transition-colors duration-300">
+                <div className="flex flex-col md:flex-row h-full">
+                    {/* Left Banner */}
+                    <div className="md:w-1/3 bg-muted/20 flex items-center justify-center p-8 border-b md:border-b-0 md:border-r border-border transition-colors duration-300">
+                        <div className="relative w-full h-[220px] md:h-full flex items-center justify-center">
+                            <Image 
+                                src={product.image} 
+                                width={280} 
+                                height={280} 
+                                alt={product.name} 
+                                className="object-contain max-h-[220px] w-auto drop-shadow-[0_10px_20px_rgba(124,58,237,0.15)]"
+                            />
+                        </div>
                     </div>
-                    <div className="w-2/3 p-8">
-                        <h3 className="text-xl font-bold">{product.name}</h3>
-                        <p className="mt-1">{product.description}</p>
+                    {/* Right Form */}
+                    <div className="md:w-2/3 p-8 bg-background flex flex-col justify-between transition-colors duration-300">
+                        <div>
+                            <h3 className="text-2xl font-bold text-foreground tracking-tight transition-colors duration-300">{product.name}</h3>
+                            <p className="mt-2 text-sm text-muted-foreground leading-relaxed transition-colors duration-300">{product.description}</p>
 
-                        {Object.entries(product.category.priceConfiguration).map(([key, value]) => {
-                            return (
-                                <div key={key}>
-                                    <h4 className="mt-6">Choose the {key}</h4>
-                                    <RadioGroup
-                                        defaultValue={value.availableOptions[0]}
-                                        onValueChange={(data) => {
-                                            handleRadioChange(key, data);
-                                        }}
-                                        className="grid grid-cols-3 gap-4 mt-2">
-                                        {value.availableOptions.map((option) => {
-                                            return (
-                                                <div key={option}>
-                                                    <RadioGroupItem
-                                                        value={option}
-                                                        id={option}
-                                                        className="peer sr-only"
-                                                        aria-label={option}
-                                                    />
-                                                    <Label
-                                                        htmlFor={option}
-                                                        className="flex flex-col items-center justify-between rounded-md border-2 bg-white p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
-                                                        {option}
-                                                    </Label>
-                                                </div>
-                                            );
-                                        })}
-                                    </RadioGroup>
-                                </div>
-                            );
-                        })}
+                            {Object.entries(product.category.priceConfiguration).map(([key, value]) => {
+                                return (
+                                    <div key={key} className="mt-6">
+                                        <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors duration-300">Choose {key}</h4>
+                                        <RadioGroup
+                                            defaultValue={value.availableOptions[0]}
+                                            onValueChange={(data) => {
+                                                handleRadioChange(key, data);
+                                            }}
+                                            className="grid grid-cols-3 gap-3 mt-2">
+                                            {value.availableOptions.map((option) => {
+                                                return (
+                                                    <div key={option}>
+                                                        <RadioGroupItem
+                                                            value={option}
+                                                            id={option}
+                                                            className="peer sr-only"
+                                                            aria-label={option}
+                                                        />
+                                                        <Label
+                                                            htmlFor={option}
+                                                            className="flex flex-col items-center justify-center rounded-xl border border-border bg-card py-3 px-4 cursor-pointer text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary transition-all">
+                                                            {option}
+                                                        </Label>
+                                                    </div>
+                                                );
+                                            })}
+                                        </RadioGroup>
+                                    </div>
+                                );
+                            })}
 
-                        {/* todo: make this condition dynamic (Add hasToppings field in category document. (Backend))  */}
-                        {/* {This solution is not scalable!!!} */}
-                        {product.category.name === 'Pizza' && (
-                            <Suspense fallback={'Toppings loading...'}>
-                                <ToppingList
-                                    selectedToppings={selectedToppings}
-                                    handleCheckBoxCheck={handleCheckBoxCheck}
-                                />
-                            </Suspense>
-                        )}
+                            {/* Render Addons / Toppings if applicable */}
+                            {(product.category.name === 'Pizza' || product.category.name === 'Gifts' || product.category.name === 'Gift Box') && (
+                                <Suspense fallback={
+                                    <div className="mt-6 text-xs text-muted-foreground animate-pulse">
+                                        Loading luxury add-ons...
+                                    </div>
+                                }>
+                                    <ToppingList
+                                        selectedToppings={selectedToppings}
+                                        handleCheckBoxCheck={handleCheckBoxCheck}
+                                    />
+                                </Suspense>
+                            )}
+                        </div>
 
-                        <div className="flex items-center justify-between mt-12">
-                            <span className="font-bold">₹{totalPrice}</span>
+                        {/* Bottom Total/Cart Action */}
+                        <div className="flex items-center justify-between mt-8 pt-6 border-t border-border transition-colors duration-300">
+                            <div className="flex flex-col">
+                                <span className="text-xs text-muted-foreground uppercase tracking-wider transition-colors duration-300">Total Price</span>
+                                <span className="text-2xl font-black text-primary">₹{totalPrice}</span>
+                            </div>
 
                             <Button
-                                className={alreadyHasInCart ? 'bg-gray-700' : 'bg-primary'}
+                                className={`rounded-full px-6 py-5 font-semibold text-sm transition-all duration-300 ${
+                                    alreadyHasInCart 
+                                    ? 'bg-secondary text-muted-foreground hover:bg-secondary cursor-not-allowed' 
+                                    : 'bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-primary/30'
+                                }`}
                                 disabled={alreadyHasInCart}
                                 onClick={() => handleAddToCart(product)}>
-                                <ShoppingCart size={20} />
-                                <span className="ml-2">
+                                <ShoppingCart size={18} className="mr-2" />
+                                <span>
                                     {alreadyHasInCart ? 'Already in cart' : 'Add to cart'}
                                 </span>
                             </Button>

@@ -1,61 +1,177 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind components;
+@tailwind utilities;
 
-
-  @layer base {
-    :root {
-      --background: 15, 33%, 98%;
-      --foreground: 20 14.3% 4.1%;
-      --card: 0 0% 100%;
-      --card-foreground: 20 14.3% 4.1%;
-      --popover: 0 0% 100%;
-      --popover-foreground: 20 14.3% 4.1%;
-      --primary: 24.6 95% 53.1%;
-      --primary-foreground: 60 9.1% 97.8%;
-      --secondary: 60 4.8% 95.9%;
-      --secondary-foreground: 24 9.8% 10%;
-      --muted: 60 4.8% 95.9%;
-      --muted-foreground: 25 5.3% 44.7%;
-      --accent: 60 4.8% 95.9%;
-      --accent-foreground: 24 9.8% 10%;
-      --destructive: 0 84.2% 60.2%;
-      --destructive-foreground: 60 9.1% 97.8%;
-      --border: 20 5.9% 90%;
-      --input: 20 5.9% 90%;
-      --ring: 24.6 95% 53.1%;
-      --radius: 0.5rem;
-    }
-
-    .dark {
-      --background: 20 14.3% 4.1%;
-      --foreground: 60 9.1% 97.8%;
-      --card: 20 14.3% 4.1%;
-      --card-foreground: 60 9.1% 97.8%;
-      --popover: 20 14.3% 4.1%;
-      --popover-foreground: 60 9.1% 97.8%;
-      --primary: 20.5 90.2% 48.2%;
-      --primary-foreground: 60 9.1% 97.8%;
-      --secondary: 12 6.5% 15.1%;
-      --secondary-foreground: 60 9.1% 97.8%;
-      --muted: 12 6.5% 15.1%;
-      --muted-foreground: 24 5.4% 63.9%;
-      --accent: 12 6.5% 15.1%;
-      --accent-foreground: 60 9.1% 97.8%;
-      --destructive: 0 72.2% 50.6%;
-      --destructive-foreground: 60 9.1% 97.8%;
-      --border: 12 6.5% 15.1%;
-      --input: 12 6.5% 15.1%;
-      --ring: 20.5 90.2% 48.2%;
-    }
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 224 71.4% 4.1%; /* #020617 */
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 263 83% 58%; /* #7C3AED */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14.3% 95.9%; /* #F1F5F9 */
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 215.4 16.3% 46.9%; /* #64748B */
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 13% 91%; /* #E2E8F0 */
+    --input: 220 13% 91%;
+    --ring: 263 83% 58%;
+    --radius: 0.75rem;
   }
 
-
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+  .dark {
+    --background: 224 39% 7%; /* #0B0F19 */
+    --foreground: 210 40% 98%; /* #F8FAFC */
+    --card: 222 47% 11%; /* #0F172A */
+    --card-foreground: 210 40% 98%;
+    --popover: 224 39% 7%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 263 83% 58%; /* #7C3AED */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 215 25% 17%; /* #1E293B */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 25% 17%;
+    --muted-foreground: 215 16% 65%; /* #94A3B8 */
+    --accent: 215 25% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 215 25% 17%;
+    --input: 215 25% 17%;
+    --ring: 263 83% 58%;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.25);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.45);
+}
+
+/* ── Glow Orbs for ambient background ── */
+.glow-orb-1, .glow-orb-2 {
+  transition: opacity 0.3s ease;
+  opacity: 0.2; /* Subtle on light mode */
+}
+
+.dark .glow-orb-1, .dark .glow-orb-2 {
+  opacity: 1; /* Vibrant on dark mode */
+}
+
+.glow-orb-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, rgba(124, 58, 237, 0) 70%);
+  filter: blur(90px);
+  top: -120px;
+  left: -120px;
+  z-index: 0;
+  pointer-events: none;
+  animation: drift-1 25s infinite alternate ease-in-out;
+}
+
+.glow-orb-2 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, rgba(99, 102, 241, 0) 70%);
+  filter: blur(110px);
+  bottom: -180px;
+  right: -180px;
+  z-index: 0;
+  pointer-events: none;
+  animation: drift-2 30s infinite alternate ease-in-out;
+}
+
+@keyframes drift-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(100px, 80px) scale(1.15); }
+}
+
+@keyframes drift-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-80px, -100px) scale(0.9); }
+}
+
+/* ── Custom Glassmorphism styles ── */
+.glass-panel {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background: rgba(255, 255, 255, 0.7); /* Frosted light glass */
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.55); /* Deep slate dark glass */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(124, 58, 237, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06), 0 0 15px rgba(124, 58, 237, 0.05);
+}
+
+.dark .glass-card-hover:hover {
+  border-color: rgba(124, 58, 237, 0.3);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(124, 58, 237, 0.1);
+}
+
+/* ── Micro-grid background pattern ── */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%);
+  z-index: 0;
+  pointer-events: none;
+  transition: background-image 0.3s ease;
+}
+
+.dark .grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+}

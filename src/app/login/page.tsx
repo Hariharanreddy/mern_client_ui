@@ -15,14 +15,14 @@ const SubmitButton = () => {
     const { pending } = useFormStatus();
 
     return (
-        <Button>
+        <Button className="rounded-full w-full py-6 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
             {pending ? (
-                <div className="flex items-center gap-2">
-                    <LoaderCircle className="animate-spin" />
-                    <span>Please wait</span>
+                <div className="flex items-center justify-center gap-2">
+                    <LoaderCircle className="animate-spin w-4 h-4" />
+                    <span>Signing in...</span>
                 </div>
             ) : (
-                'Login'
+                'Sign In'
             )}
         </Button>
     );
@@ -44,65 +44,76 @@ const Login = () => {
     }
 
     return (
-        <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-            <div className="flex items-center justify-center py-12">
-                <div className="mx-auto grid w-[350px] gap-6">
+        <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 bg-background relative overflow-hidden transition-colors duration-300">
+            {/* Form Section */}
+            <div className="flex items-center justify-center py-12 relative z-10">
+                <div className="mx-auto grid w-[350px] gap-8 p-8 rounded-2xl glass-panel border border-border">
                     <div className="grid gap-2 text-center">
                         <p
                             aria-live="polite"
-                            className={`${
-                                state.type === 'error' ? 'text-red-500' : 'text-green-500'
-                            }`}>
+                            className={`text-xs font-semibold ${state.type === 'error' ? 'text-rose-500' : 'text-emerald-500'
+                                }`}>
                             {state.message}
                         </p>
-                        <h1 className="text-3xl font-bold">Login</h1>
-                        <p className="text-balance text-muted-foreground">
-                            Enter your email below to login to your account
+                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground transition-colors duration-300">Welcome Back</h1>
+                        <p className="text-sm text-muted-foreground transition-colors duration-300">
+                            Enter your credentials to access your JoyNest account.
                         </p>
                     </div>
                     <form action={formAction}>
-                        <div className="grid gap-4">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="email" className="text-muted-foreground text-xs font-semibold uppercase tracking-wider transition-colors duration-300">Email Address</Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     name="email"
-                                    placeholder="m@example.com"
+                                    placeholder="name@example.com"
                                     required
+                                    className="bg-background border-border text-foreground rounded-xl focus:border-primary/50 focus:ring-1 focus:ring-primary/50 placeholder:text-muted-foreground/50 transition-colors duration-300"
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="password" className="text-muted-foreground text-xs font-semibold uppercase tracking-wider transition-colors duration-300">Password</Label>
                                     <Link
                                         href="/forgot-password"
-                                        className="ml-auto inline-block text-sm underline">
-                                        Forgot your password?
+                                        className="text-xs text-primary hover:underline font-semibold">
+                                        Forgot password?
                                     </Link>
                                 </div>
-                                <Input id="password" name="password" type="password" required />
+                                <Input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    required
+                                    className="bg-background border-border text-foreground rounded-xl focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-colors duration-300"
+                                />
                             </div>
                             <SubmitButton />
                         </div>
                     </form>
-                    <div className="mt-4 text-center text-sm">
+                    <div className="text-center text-sm text-muted-foreground transition-colors duration-300">
                         Don&apos;t have an account?{' '}
-                        <Link href="/register" className="underline">
+                        <Link href="/register" className="text-primary hover:underline font-semibold">
                             Sign up
                         </Link>
                     </div>
                 </div>
             </div>
-            <div className="hidden bg-muted lg:block">
+
+            {/* Image Banner Section */}
+            <div className="hidden lg:block relative h-screen">
                 <Image
-                    src="/login-image.webp"
+                    src="/gift-login.png"
                     width={1920}
                     height={1080}
                     style={{ objectFit: 'cover' }}
-                    alt="Image"
-                    className="h-screen"
+                    alt="JoyNest Banner"
+                    className="h-full w-full object-cover dark:brightness-[0.6] brightness-[0.8] contrast-[1.05]"
+                    priority
                 />
+                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/10 to-transparent" />
             </div>
         </div>
     );

@@ -216,9 +216,9 @@ const CustomerForm = () => {
                                                                         aria-label={'card'}
                                                                     />
                                                                 </FormControl>
-                                                                <Label
+                                                                 <Label
                                                                     htmlFor={'card'}
-                                                                    className="flex items-center justify-center rounded-md border-2 bg-white p-2 h-16 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                                                    className="flex items-center justify-center rounded-xl border border-border bg-card p-2 h-16 hover:bg-accent hover:text-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
                                                                     <CreditCard size={'20'} />
                                                                     <span className="ml-2">
                                                                         Card
@@ -236,7 +236,7 @@ const CustomerForm = () => {
                                                                 </FormControl>
                                                                 <Label
                                                                     htmlFor={'cash'}
-                                                                    className="flex items-center justify-center rounded-md border-2 bg-white p-2 h-16 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                                                                    className="flex items-center justify-center rounded-xl border border-border bg-card p-2 h-16 hover:bg-accent hover:text-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
                                                                     <Coins size={'20'} />
                                                                     <span className="ml-2 text-md">
                                                                         Cash

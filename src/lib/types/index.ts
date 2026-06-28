@@ -8,7 +8,7 @@ export interface Tenant {
 
 export interface PriceConfiguration {
     [key: string]: {
-        priceType: 'base' | 'aditional';
+        priceType: 'base' | 'additional';
         availableOptions: string[];
     };
 }
@@ -34,7 +34,7 @@ export type ProductAttribute = {
 
 export interface ProductPriceConfiguration {
     [key: string]: {
-        priceType: 'base' | 'aditional';
+        priceType: 'base' | 'additional';
         availableOptions: {
             [key: string]: number;
         };
