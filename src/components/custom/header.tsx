@@ -8,13 +8,12 @@ import dynamic from 'next/dynamic';
 import TenantSelect from './tenant-select';
 import { getSession } from '@/lib/session';
 import Logout from './logout';
-import ThemeToggle from './theme-toggle';
 
 const CartCounterWithoutSSR = dynamic(() => import('./cart-counter'), { ssr: false });
 
 const Header = async () => {
     const session = await getSession();
-    
+
     const tenantsResponse = await fetch(`${process.env.BACKEND_URL}/api/auth/tenants?perPage=100`, {
         next: {
             revalidate: 3600, // 1 hour
@@ -28,12 +27,12 @@ const Header = async () => {
     const restaurants: { data: Tenant[] } = await tenantsResponse.json();
 
     return (
-        <header className="bg-background/80 backdrop-blur-md sticky top-0 border-b border-border/40 z-50 transition-colors duration-300">
+        <header className="bg-background/80 backdrop-blur-md sticky top-0 border-b border-border/40 z-50">
             <nav className="container py-5 flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                     <Link href={'/'} className="flex items-center space-x-2.5 text-foreground hover:text-primary transition-colors">
                         <Image src="/logo.svg" width={36} height={36} alt="JoyNest" className="object-contain w-9 h-9" />
-                        <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-foreground/90 to-primary bg-clip-text text-transparent">JoyNest</span>
+                        <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-foreground via-slate-700 to-primary bg-clip-text text-transparent">JoyNest</span>
                     </Link>
                     <TenantSelect restaurants={restaurants} />
                 </div>
@@ -50,11 +49,8 @@ const Header = async () => {
                             </Link>
                         </li>
                     </ul>
-                    <div className="flex items-center gap-5">
-                        <CartCounterWithoutSSR />
-                        <ThemeToggle />
-                    </div>
-                    <div className="flex items-center ml-2 text-muted-foreground gap-x-2">
+                    <CartCounterWithoutSSR />
+                    <div className="flex items-center ml-8 text-muted-foreground gap-x-2">
                         <Phone className="w-4 h-4 text-primary" />
                         <span className="text-sm font-semibold">+91 9800 098 998</span>
                     </div>

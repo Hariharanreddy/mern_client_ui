@@ -7,14 +7,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const TenantSelect = ({ restaurants }: { restaurants: { data: Tenant[] } }) => {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const currentValue = searchParams.get('tenantId') || searchParams.get('restaurantId') || '';
 
     const handleValueChange = (value: string) => {
-        router.push(`/?restaurantId=${value}`);
+        router.push(`/?tenantId=${value}`);
     };
     return (
         <Select
             onValueChange={handleValueChange}
-            defaultValue={searchParams.get('restaurantId') || ''}>
+            value={currentValue}>
             <SelectTrigger className="w-[180px] focus:ring-0">
                 <SelectValue placeholder="Select Boutique" />
             </SelectTrigger>

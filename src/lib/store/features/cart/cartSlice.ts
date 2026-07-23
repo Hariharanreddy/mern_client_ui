@@ -11,7 +11,7 @@ export interface CartItem extends Pick<Product, '_id' | 'name' | 'image' | 'pric
         selectedToppings: Topping[];
     };
     qty: number;
-    hash?: string;
+    hash?: string; //Why hash is here - 
 }
 export interface CartState {
     cartItems: CartItem[];
@@ -39,6 +39,10 @@ export const cartSlice = createSlice({
                 cartItems: [...state.cartItems, newItem],
             };
         },
+        //We are using setInitialCartItems because we need to set the initial cart items when the user logs in
+        //and the cart is not empty. So we are setting the initial cart items to the cart items from the local storage.
+        //We are using push(...action.payload) because we want to add all the items from the payload to the cart.
+        //If we use state.cartItems = action.payload, then the cart items will be replaced with the payload.
         setInitialCartItems: (state, action: PayloadAction<CartItem[]>) => {
             state.cartItems.push(...action.payload);
         },
@@ -46,7 +50,7 @@ export const cartSlice = createSlice({
             const index = state.cartItems.findIndex((item) => item.hash === action.payload.hash);
 
             if (action.payload.qty === 0) {
-                state.cartItems.splice(index, 1);
+                state.cartItems.splice(index, 1); //splice is used for removing elements from an array
                 window.localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
                 return;
             }

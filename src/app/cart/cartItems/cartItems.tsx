@@ -11,6 +11,7 @@ import { getItemTotal } from '@/lib/utils';
 const CartItems = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const tenantId = searchParams.get('tenantId') || searchParams.get('restaurantId') || '';
 
     const [isClient, setIsClient] = React.useState(false);
     useEffect(() => {
@@ -37,7 +38,7 @@ const CartItems = () => {
                 <p className="text-slate-400 text-lg font-medium">Your shopping cart is empty!</p>
                 <Link
                     className="text-primary hover:underline transition-colors mt-2 text-sm font-semibold"
-                    href={`/?restaurantId=${searchParams.get('restaurantId')}`}>
+                    href={`/?tenantId=${tenantId}`}>
                     Continue shopping?
                 </Link>
             </div>
@@ -59,7 +60,7 @@ const CartItems = () => {
                 <Button
                     className="rounded-full px-8 py-6 font-bold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 transform hover:-translate-y-0.5"
                     onClick={() =>
-                        router.push(`/checkout/?restaurantId=${searchParams.get('restaurantId')}`)
+                        router.push(`/checkout/?tenantId=${tenantId}`)
                     }>
                     <span>Proceed to Checkout</span>
                     <ArrowRight size={18} className="ml-2" />

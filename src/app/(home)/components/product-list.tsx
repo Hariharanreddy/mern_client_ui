@@ -2,14 +2,29 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import React from 'react';
 import ProductCard from './product-card';
 import { Category, Product } from '@/lib/types';
+import { Sparkles } from 'lucide-react';
 
-const ProductList = async ({ searchParams }: { searchParams: { restaurantId: string } }) => {
-    console.log('searchParams', searchParams.restaurantId);
-    // todo: do concurrent requests -> Promise.all()
+const ProductList = async ({ searchParams }: { searchParams: { restaurantId?: string; tenantId?: string } }) => {
+    const tenantId = searchParams?.tenantId || searchParams?.restaurantId || '';
+    console.log('searchParams tenantId:', tenantId);
+    
+    if (!tenantId) {
+        return (
+            <div className="container py-24 text-center">
+                <div className="max-w-md mx-auto space-y-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary animate-bounce">
+                        <Sparkles className="w-8 h-8" />
+                    </div>
+                    <h2 className="text-2xl font-bold tracking-tight text-foreground">Select a Store to Begin</h2>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                        To view our exclusive selection of handcrafted gift hampers, chocolates, and personalized surprises, please choose a boutique store from the dropdown menu above.
+                    </p>
+                </div>
+            </div>
+        );
+    }
     const categoryResponse = await fetch(`${process.env.BACKEND_URL}/api/catalog/categories`, {
-        next: {
-            revalidate: 3600, // 1 hour
-        },
+        cache: 'no-store',
     });
 
     if (!categoryResponse.ok) {
@@ -20,15 +35,22 @@ const ProductList = async ({ searchParams }: { searchParams: { restaurantId: str
 
     // todo: add pagination
     const productsResponse = await fetch(
-        `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=${searchParams.restaurantId}`,
+        `${process.env.BACKEND_URL}/api/catalog/products?perPage=100&limit=100&tenantId=${tenantId}`,
         {
-            next: {
-                revalidate: 3600, // 1 hour
-            },
+            cache: 'no-store',
         }
     );
 
     const products: { data: Product[] } = await productsResponse.json();
+
+    if (!categories || categories.length === 0) {
+        return (
+            <div className="container py-12 text-center text-muted-foreground font-semibold">
+                No categories available.
+            </div>
+        );
+    }
+
     return (
         <section>
             <div className="container py-12">

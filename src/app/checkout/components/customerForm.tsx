@@ -80,9 +80,9 @@ const CustomerForm = () => {
     }
 
     const handlePlaceOrder = (data: z.infer<typeof formSchema>) => {
-        const tenantId = searchParam.get('restaurantId');
+        const tenantId = searchParam.get('tenantId') || searchParam.get('restaurantId');
         if (!tenantId) {
-            alert('Restaurant Id is required!');
+            alert('Tenant Id is required!');
             return;
         }
         const orderData: OrderData = {

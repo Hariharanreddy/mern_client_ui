@@ -12,7 +12,7 @@ const CartCounter = () => {
     return (
         <>
             <div className="relative mr-3">
-                <Link href={`/cart?restaurantId=${searchParams.get('restaurantId')}`}>
+                <Link href={`/cart?tenantId=${searchParams.get('tenantId') || searchParams.get('restaurantId') || ''}`}>
                     <ShoppingBasket className="hover:text-primary transition-colors text-foreground" />
                 </Link>
                 <span className="absolute -top-3.5 -right-3 h-5 w-5 text-[10px] flex items-center justify-center rounded-full bg-primary font-bold text-white shadow-sm border border-background">

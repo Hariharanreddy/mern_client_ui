@@ -29,7 +29,7 @@ const ToppingCard = ({ topping, selectedToppings, handleCheckBoxCheck }: PropTyp
                     width={48} 
                     height={48} 
                     alt={topping.name} 
-                    className="object-contain max-h-12 w-auto transition-transform duration-300 hover:scale-108"
+                    className="object-contain max-h-12 w-auto transition-transform duration-300 hover:scale-108 mix-blend-multiply"
                 />
             </div>
             <h5 className="text-xs font-semibold tracking-tight leading-none">{topping.name}</h5>

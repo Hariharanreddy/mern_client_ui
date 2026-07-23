@@ -4,7 +4,7 @@ import ProductList from './components/product-list';
 import { Suspense } from 'react';
 import { Sparkles, Truck, Gift as GiftIcon, Star } from 'lucide-react';
 
-export default async function Home({ searchParams }: { searchParams: { restaurantId: string } }) {
+export default async function Home({ searchParams }: { searchParams: { restaurantId?: string; tenantId?: string } }) {
     return (
         <>
             <section className="relative py-20 md:py-28 overflow-hidden bg-transparent">

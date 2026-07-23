@@ -63,15 +63,15 @@ const OrderSummary = ({
                 return;
             }
 
-            const restaurantId = searchParam.get('restaurantId');
+            const tenantId = searchParam.get('tenantId') || searchParam.get('restaurantId');
 
-            if (!restaurantId) {
+            if (!tenantId) {
                 return;
             }
 
             const data: CouponCodeData = {
                 code: couponCodeRef.current.value,
-                tenantId: restaurantId,
+                tenantId: tenantId,
             };
             return await verifyCoupon(data).then((res) => res.data);
         },

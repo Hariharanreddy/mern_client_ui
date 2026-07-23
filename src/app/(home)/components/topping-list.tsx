@@ -15,10 +15,11 @@ const ToppingList = ({
     
     useEffect(() => {
         const fetchData = async () => {
+            const tenantId = searchParams.get('tenantId') || searchParams.get('restaurantId') || '';
             const toppingResponse = await fetch(
                 `${
                     process.env.NEXT_PUBLIC_BACKEND_URL
-                }/api/catalog/toppings?tenantId=${searchParams.get('restaurantId')}`
+                }/api/catalog/toppings?tenantId=${tenantId}`
             );
             const toppingsData = await toppingResponse.json();
             setToppings(toppingsData);

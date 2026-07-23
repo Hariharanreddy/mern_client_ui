@@ -4,6 +4,13 @@ import { AppStore, makeStore } from '@/lib/store/store';
 import { useRef } from 'react';
 import { Provider } from 'react-redux';
 
+//Working of below code 
+// this component is using the concept of closure
+// useRef stores the value between renders
+// makeStore creates a new store instance
+// if the store is already created, it will not create a new store instance
+
+
 export default function StoreProvider({ children }: { children: React.ReactNode }) {
     const storeRef = useRef<AppStore>();
     if (!storeRef.current) {

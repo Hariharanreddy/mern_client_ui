@@ -21,11 +21,15 @@ import CustomerForm from './components/customerForm';
 export default async function Checkout({
     searchParams,
 }: {
-    searchParams: { restaurantId: string };
+    searchParams: { restaurantId?: string; tenantId?: string };
 }) {
     const session = await getSession();
 
-    const sParams = new URLSearchParams(searchParams);
+    const tenantId = searchParams.tenantId || searchParams.restaurantId || '';
+    const sParams = new URLSearchParams();
+    if (tenantId) {
+        sParams.set('tenantId', tenantId);
+    }
     const existingQueryString = sParams.toString();
 
     sParams.append('return-to', `/checkout?${existingQueryString}`);

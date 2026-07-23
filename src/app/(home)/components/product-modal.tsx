@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { createPortal } from 'react-dom';
 
 import { CircleCheck, ShoppingCart } from 'lucide-react';
 import React, { startTransition, Suspense, useState } from 'react';
@@ -30,6 +31,24 @@ type ChosenConfig = {
 const ProductModal = ({ product }: { product: Product }) => {
     const { toast } = useToast();
     const [dialogOpen, setDialogOpen] = useState(false);
+
+    const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+    const [mouseCoords, setMouseCoords] = useState({ x: 0, y: 0 });
+    const [isHovering, setIsHovering] = useState(false);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - left) / width) * 100;
+        const y = ((e.clientY - top) / height) * 100;
+        setZoomPos({ x, y });
+        setMouseCoords({ x: e.clientX, y: e.clientY });
+    };
+
+    const zoomBoxLeft = mouseCoords.x - 370;
+
+    const zoomBoxTop = typeof window !== 'undefined'
+        ? Math.max(20, Math.min(mouseCoords.y - 240, window.innerHeight - 370))
+        : mouseCoords.y - 240;
 
     const cartItems = useAppSelector((state) => state.cart.cartItems);
     const dispatch = useAppDispatch();
@@ -127,14 +146,17 @@ const ProductModal = ({ product }: { product: Product }) => {
             <DialogContent className="max-w-3xl p-0 overflow-hidden bg-background border border-border text-foreground rounded-2xl shadow-2xl transition-colors duration-300">
                 <div className="flex flex-col md:flex-row h-full">
                     {/* Left Banner */}
-                    <div className="md:w-1/3 bg-muted/20 flex items-center justify-center p-8 border-b md:border-b-0 md:border-r border-border transition-colors duration-300">
+                    <div className="md:w-1/3 bg-white flex items-center justify-center p-8 border-b md:border-b-0 md:border-r border-border transition-colors duration-300">
                         <div className="relative w-full h-[220px] md:h-full flex items-center justify-center">
                             <Image 
                                 src={product.image} 
                                 width={280} 
                                 height={280} 
                                 alt={product.name} 
-                                className="object-contain max-h-[220px] w-auto drop-shadow-[0_10px_20px_rgba(124,58,237,0.15)]"
+                                className="object-contain max-h-[220px] w-auto drop-shadow-[0_10px_20px_rgba(124,58,237,0.15)] cursor-zoom-in mix-blend-multiply"
+                                onMouseMove={handleMouseMove}
+                                onMouseEnter={() => setIsHovering(true)}
+                                onMouseLeave={() => setIsHovering(false)}
                             />
                         </div>
                     </div>
@@ -177,7 +199,7 @@ const ProductModal = ({ product }: { product: Product }) => {
                             })}
 
                             {/* Render Addons / Toppings if applicable */}
-                            {(product.category.name === 'Pizza' || product.category.name === 'Gifts' || product.category.name === 'Gift Box') && (
+                            {(product.category.name.toLowerCase().includes('gift') || product.category.name.toLowerCase().includes('pizza')) && (
                                 <Suspense fallback={
                                     <div className="mt-6 text-xs text-muted-foreground animate-pulse">
                                         Loading luxury add-ons...
@@ -214,6 +236,28 @@ const ProductModal = ({ product }: { product: Product }) => {
                         </div>
                     </div>
                 </div>
+                {isHovering && typeof document !== 'undefined' && createPortal(
+                    <div 
+                        className="fixed z-[99999] w-[350px] h-[350px] bg-background border-2 border-primary/20 rounded-2xl shadow-2xl overflow-hidden pointer-events-none transition-opacity duration-200"
+                        style={{
+                            left: `${zoomBoxLeft}px`,
+                            top: `${zoomBoxTop}px`,
+                        }}
+                    >
+                        <div className="relative w-full h-full">
+                            <img 
+                                src={product.image} 
+                                alt="zoomed-preview"
+                                className="absolute object-cover w-[250%] h-[250%] max-w-none max-h-none mix-blend-multiply"
+                                style={{
+                                    left: `${-zoomPos.x * 1.5}%`,
+                                    top: `${-zoomPos.y * 1.5}%`,
+                                }}
+                            />
+                        </div>
+                    </div>,
+                    document.body
+                )}
             </DialogContent>
         </Dialog>
     );
