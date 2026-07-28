@@ -76,7 +76,7 @@ const OrderSummary = ({
             return await verifyCoupon(data).then((res) => res.data);
         },
         onSuccess: (data) => {
-            if (data.valid) {
+            if (data && data.valid) {
                 setDiscountError('');
                 handleCouponCodeChange(couponCodeRef.current ? couponCodeRef.current.value : '');
                 setDiscountPercentage(data.discount);
@@ -87,6 +87,12 @@ const OrderSummary = ({
             handleCouponCodeChange('');
             setDiscountPercentage(0);
         },
+        onError: (err: any) => {
+            const serverMessage = err.response?.data?.message || err.response?.data?.errors?.[0]?.message || 'Coupon is invalid';
+            setDiscountError(serverMessage);
+            handleCouponCodeChange('');
+            setDiscountPercentage(0);
+        }
     });
 
     const handleCouponValidation = (e: React.MouseEvent) => {
@@ -138,11 +144,29 @@ const OrderSummary = ({
                         className="w-full"
                         placeholder="Coupon code"
                         ref={couponCodeRef}
+                        disabled={!!discountPercentage}
                     />
-                    {/* todo: add loading */}
-                    <Button onClick={handleCouponValidation} variant={'outline'}>
-                        Apply
-                    </Button>
+                    {discountPercentage ? (
+                        <Button
+                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (couponCodeRef.current) {
+                                    couponCodeRef.current.value = '';
+                                }
+                                setDiscountPercentage(0);
+                                handleCouponCodeChange('');
+                                setDiscountError('');
+                            }}
+                            variant={'destructive'}
+                        >
+                            Remove
+                        </Button>
+                    ) : (
+                        <Button onClick={handleCouponValidation} variant={'outline'}>
+                            Apply
+                        </Button>
+                    )}
                 </div>
 
                 <div className="text-right mt-6">
