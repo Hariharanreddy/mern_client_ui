@@ -24,9 +24,14 @@ export default async function login(prevState: any, formdata: FormData) {
         if (!response.ok) {
             const error = await response.json();
             console.log('error', error);
+            const errorMessage =
+                error.errors?.[0]?.msg ||
+                error.errors?.[0]?.message ||
+                error.message ||
+                'An unexpected error occurred';
             return {
                 type: 'error',
-                message: error.errors[0].msg,
+                message: errorMessage,
             };
         }
 
