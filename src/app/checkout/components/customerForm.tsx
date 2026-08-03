@@ -2,7 +2,7 @@
 import React from 'react';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
-import { Coins, CreditCard, Plus } from 'lucide-react';
+import { Coins, CreditCard, LoaderCircle, Plus } from 'lucide-react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import OrderSummary from './orderSummary';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { clearCart } from '@/lib/store/features/cart/cartSlice';
 
 const formSchema = z.object({
@@ -32,6 +32,7 @@ const formSchema = z.object({
 
 const CustomerForm = () => {
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const customerForm = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -61,22 +62,30 @@ const CustomerForm = () => {
             return await createOrder(data, idempotencyKey).then((res) => res.data);
         },
         retry: 3,
-        onSuccess: (data: { paymentUrl: string | null }) => {
+        onSuccess: (data: { paymentUrl: string | null; orderId: string }) => {
             if (data.paymentUrl) {
                 window.location.href = data.paymentUrl;
+                return;
             }
 
-            alert('Order placed successfully!');
+            // This will happen if payment mode is Cash.
+            // 1. Clear the cart
             dispatch(clearCart());
 
-            // todo: This will happen if payment mode is Cash.
-            // todo: 1. Clear the cart 2. Redirect the user to order status page.
+            // 2. Redirect the user to order status page.
+            const tenantId = searchParam.get('tenantId') || '';
+            router.push(`/payment?success=true&orderId=${data.orderId}&tenantId=${tenantId}`);
         },
     });
 
     if (isLoading) {
-        // todo: use Spinner/Loader or Shadcn Skeleton
-        return <h3>Loading...</h3>;
+        return (
+            <div className="fixed inset-0 bg-background/60 backdrop-blur-sm flex flex-col items-center justify-center z-50">
+                <LoaderCircle className="animate-spin text-primary w-12 h-12 mb-4" />
+                <h3 className="text-lg font-bold text-foreground">Creating your order...</h3>
+                <p className="text-sm text-muted-foreground">Please do not close this window or refresh the page.</p>
+            </div>
+        );
     }
 
     const handlePlaceOrder = (data: z.infer<typeof formSchema>) => {
@@ -216,7 +225,7 @@ const CustomerForm = () => {
                                                                         aria-label={'card'}
                                                                     />
                                                                 </FormControl>
-                                                                 <Label
+                                                                <Label
                                                                     htmlFor={'card'}
                                                                     className="flex items-center justify-center rounded-xl border border-border bg-card p-2 h-16 hover:bg-accent hover:text-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/10 peer-data-[state=checked]:text-primary cursor-pointer transition-all">
                                                                     <CreditCard size={'20'} />
