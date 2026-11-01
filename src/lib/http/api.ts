@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CouponCodeData, OrderData } from '../types';
+import { CouponCodeData, Order, OrderData } from '../types';
 
 export const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
@@ -30,3 +30,7 @@ export const createOrder = (data: OrderData, idempotencyKey: string) =>
 
 export const getSingleOrder = (orderId: string) =>
     api.get(`${ORDER_SERVICE_PREFIX}/orders/${orderId}?fields=orderStatus`);
+
+export const getMyOrders = () =>
+    api.get<Order[]>(`${ORDER_SERVICE_PREFIX}/orders/mine`);
+
